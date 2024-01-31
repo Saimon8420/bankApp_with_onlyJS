@@ -9,61 +9,71 @@ const rl = readline.createInterface({
 // stores data
 let accounts = [];
 
-// function to create an account
+// 1.function to create an account
 function createAccount() {
-    try {
-        rl.question('Enter account holder\'s name: ', (name) => {
-            rl.question('Enter account number: ', (number) => {
-                rl.question('Enter account type (Savings/Current/Salary/Student): ', (type) => {
-                    rl.question('Enter initial balance: ', (balance) => {
-                        balance = parseFloat(balance);
+    rl.question('Enter account holder\'s name: ', (name) => {
+        rl.question('Enter account number: ', (number) => {
+            rl.question('Enter account type (Savings/Current/Salary/Student): ', (type) => {
+                rl.question('Enter initial balance: ', (balance) => {
+                    balance = parseFloat(balance);
 
-                        // matching account type exists of not
-                        const accountType = ["Savings", "Current", "Salary", "Student"];
-                        const matchedType = accountType.find(each => each.toLowerCase() === type.toLowerCase());
+                    // matching account type exists of not
+                    const accountType = ["Savings", "Current", "Salary", "Student"];
+                    const matchedType = accountType.find(each => each.toLowerCase() === type.toLowerCase());
 
-                        // matching duplication of accountNo
-                        const matchedAccNo = accounts.find(each => each.number === number);
-                        if (balance < 500 || !matchedType || (accounts.length !== 0 && matchedAccNo)) {
-                            if (balance < 500) {
-                                console.log("\nInitially, You have to deposit minimum 500!!");
-                            }
-                            if (!matchedType) {
-                                console.log("\nAccount type not matched!!");
-                            }
-                            if (matchedAccNo) {
-                                console.log(`\nAccount number ${number} already exists!!`);
-                            }
-                            main();
+                    // matching duplication of accountNo
+                    const matchedAccNo = accounts.find(each => each.number === number);
+                    if (balance < 500 || !matchedType || (accounts.length !== 0 && matchedAccNo)) {
+                        if (balance < 500) {
+                            console.log("\nInitially, You have to deposit minimum 500!!");
                         }
-
-                        else {
-                            let account = {
-                                name: name,
-                                number: number,
-                                balance: balance,
-                                creationDate: new Date(),
-                                type: type.toLowerCase(),
-                            };
-                            accounts.push(account);
-                            console.log(`\nCongrats!!Account ${number} created successfully`);
-                            main();
+                        if (!matchedType) {
+                            console.log("\nAccount type not matched!!");
                         }
-                    });
+                        if (matchedAccNo) {
+                            console.log(`\nAccount number ${number} already exists!!`);
+                        }
+                        main();
+                    }
+
+                    else {
+                        let account = {
+                            name: name,
+                            number: number,
+                            balance: balance,
+                            creationDate: new Date(),
+                            type: type.toLowerCase(),
+                        };
+                        accounts.push(account);
+                        console.log(`\nCongrats!!Account ${number} created successfully`);
+                        main();
+                    }
                 });
             });
         });
-    } catch (error) {
-        console.log(error);
-    }
+    });
 }
 
-// function to display all accounts
+// 2.function to display all accounts
 function displayAllAccounts() {
     accounts.map(account => {
         console.log(`Name: ${account.name}, Number: ${account.number}, Balance: ${account.balance}, Type: ${account.type}`);
     });
     main();
+}
+
+// 4.function to delete an account
+function deleteAccount() {
+    rl.question('Enter account number to delete: ', (number) => {
+        let index = accounts.findIndex(acc => acc.number === number);
+        if (index !== -1) {
+            accounts.splice(index, 1);
+            console.log("\nAccount deleted successfully!!");
+        } else {
+            console.log("\nAccount not found!!");
+        }
+        main();
+    });
 }
 
 
