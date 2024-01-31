@@ -57,7 +57,7 @@ function createAccount() {
 // 2.function to display all accounts
 function displayAllAccounts() {
     accounts.map(account => {
-        console.log(`Name: ${account.name}, Number: ${account.number}, Balance: ${account.balance}, Type: ${account.type}`);
+        console.log(`\nName: ${account.name}, Number: ${account.number}, Balance: ${account.balance}, Type: ${account.type}`);
     });
     main();
 }
@@ -68,7 +68,7 @@ function deleteAccount() {
         let index = accounts.findIndex(acc => acc.number === number);
         if (index !== -1) {
             accounts.splice(index, 1);
-            console.log("\nAccount deleted successfully!!");
+            console.log(`\nAccount ${number} deleted successfully!!`);
         } else {
             console.log("\nAccount not found!!");
         }
@@ -143,6 +143,18 @@ function withdrawAmount() {
     });
 }
 
+// 7.function search an account
+function searchAccount() {
+    rl.question('Enter account number to search: ', (number) => {
+        let account = accounts.find(acc => acc.number === number);
+        if (account) {
+            console.log(`\nName: ${account.name}, Number: ${account.number}, Balance: ${account.balance}, Type:${account.type}`);
+        } else {
+            console.log("\nAccount not found");
+        }
+        main();
+    });
+}
 
 // main function
 function main() {
@@ -173,6 +185,9 @@ function main() {
                 break;
             case 6:
                 withdrawAmount();
+                break;
+            case 7:
+                searchAccount();
                 break;
             case 8:
                 console.log("Exiting...Thank You!");
