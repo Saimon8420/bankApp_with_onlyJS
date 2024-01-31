@@ -62,6 +62,114 @@ function displayAllAccounts() {
     main();
 }
 
+// 3. function to update an account
+function updateAccount() {
+    rl.question('Enter account number to update: ', (number) => {
+        // find account to update
+        let account = accounts.find(acc => acc.number === number);
+        if (account) {
+            console.log("\n1. To update name");
+            console.log("2. To update account type");
+            console.log("3. To update account number");
+
+            //Remove matched account from accounts
+            const existsAccount = accounts.filter(each => each.number !== number);
+
+            rl.question('\nEnter your choice: ', (choice) => {
+                switch (parseInt(choice)) {
+                    case 1:
+                        function updateName() {
+                            rl.question(`\nCurrent name is ${account.name}.Enter new name to update: `, (newName) => {
+                                //update with the new value
+                                account.name = newName;
+                                if (accounts.length === 0) {
+                                    accounts = account;
+                                    console.log(`\nAccount updated Successfully with data ${newName}`)
+                                }
+                                else {
+                                    const newData = [existsAccount, account];
+                                    // sets main accounts with updated data
+                                    accounts = newData;
+                                    console.log(`\nAccount updated Successfully with data ${newName}`)
+                                }
+                            })
+                        }
+                        updateName();
+                        break;
+                    case 2:
+                        function updateAccType() {
+
+                            // filter existing type
+                            const accountType = ["Savings", "Current", "Salary", "Student"];
+                            const filterRestType = accountType.filter(each => each.toLowerCase() !== account.type.toLowerCase());
+
+                            rl.question(`\nCurrent account type is ${account.type}.Enter new account type ${filterRestType} to update: `, (newType) => {
+                                // matching account type exists of not
+                                const matchedType = filterRestType.find(each => each.toLowerCase() === newType.toLowerCase());
+                                if (matchedType) {
+                                    // update with new value
+                                    account.type = newType;
+
+                                    if (accounts.length === 0) {
+                                        accounts = account;
+
+                                        console.log(`\nAccount updated Successfully with data ${newType}`)
+                                    }
+                                    else {
+                                        const newData = [existsAccount, account];
+                                        // sets main accounts with updated data
+                                        accounts = newData;
+
+                                        console.log(`\nAccount updated Successfully with data ${newType}`)
+                                    }
+                                }
+                                else {
+                                    console.log("\nInvalid account type")
+                                }
+                            })
+                        }
+                        updateAccType();
+                        break;
+                    case 3:
+                        function updateAccNumber() {
+                            rl.question(`\nCurrent Number is ${number}.Enter new account number to update: `, (newNumber) => {
+                                // checking new number exists or not
+                                const findAcNo = accounts.find(acc => acc.number === newNumber);
+
+                                if (findAcNo.length === 0) {
+                                    // update with new value
+                                    account.number = newNumber;
+                                    if (accounts.length === 0) {
+                                        accounts = account;
+
+                                        console.log(`\nAccount updated Successfully with new data ${newNumber}`)
+                                    }
+                                    else {
+                                        const newData = [existsAccount, account];
+                                        // sets main accounts with updated data
+                                        accounts = newData;
+
+                                        console.log(`\nAccount updated Successfully with new data ${newNumber}`)
+                                    }
+                                }
+                                else {
+                                    console.log(`\n Account with this ${newNumber} number has already exists`)
+                                }
+                            })
+                        }
+                        updateAccNumber();
+                        break;
+                    default:
+                        console.log("Invalid choice");
+                }
+            });
+        } else {
+            console.log("\nAccount not found");
+        }
+        main();
+    });
+}
+
 // 4.function to delete an account
 function deleteAccount() {
     rl.question('Enter account number to delete: ', (number) => {
@@ -176,6 +284,9 @@ function main() {
                 break;
             case 2:
                 displayAllAccounts();
+                break;
+            case 3:
+                updateAccount();
                 break;
             case 4:
                 deleteAccount();
