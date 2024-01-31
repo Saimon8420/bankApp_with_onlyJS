@@ -9,6 +9,7 @@ const rl = readline.createInterface({
 // stores data
 let accounts = [];
 
+// function to create an account
 function createAccount() {
     try {
         rl.question('Enter account holder\'s name: ', (name) => {
@@ -57,6 +58,14 @@ function createAccount() {
     }
 }
 
+// function to display all accounts
+function displayAllAccounts() {
+    accounts.map(account => {
+        console.log(`Name: ${account.name}, Number: ${account.number}, Balance: ${account.balance}, Type: ${account.type}`);
+    });
+    main();
+}
+
 
 // main function
 function main() {
@@ -75,6 +84,9 @@ function main() {
         switch (parseInt(choice)) {
             case 1:
                 createAccount();
+                break;
+            case 1:
+                displayAllAccounts();
                 break;
             case 8:
                 console.log("Exiting...Thank You!");
