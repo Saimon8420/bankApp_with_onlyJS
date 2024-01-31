@@ -107,6 +107,42 @@ function depositAmount() {
     });
 }
 
+// 6.function withDraw from an account
+function withdrawAmount() {
+    rl.question('Enter account number to withDraw from: ', (number) => {
+        let account = accounts.find(acc => acc.number === number);
+        if (account) {
+            rl.question('Enter withDraw Amount: ', (amount) => {
+                if (amount <= 0) {
+                    console.log("\nInvalid withDraw amount!!");
+                }
+                else {
+                    if (account.balance < amount) {
+                        console.log("\nNot sufficient balance for withDraw!!");
+                    }
+                    else {
+                        amount = parseFloat(amount);
+                        account.balance = account.balance - amount;
+                        const filterPrev = accounts.filter(acc => acc.number !== number);
+                        if (filterPrev.length === 0) {
+                            accounts = account;
+                        }
+                        else {
+                            const newData = [filterPrev, account];
+                            accounts = newData;
+                        }
+                        console.log(`\nAmount ${amount}, successfully withDraw from account ${number}`);
+                    }
+                }
+                main();
+            });
+        } else {
+            console.log("\nAccount not found!!");
+            main();
+        }
+    });
+}
+
 
 // main function
 function main() {
@@ -134,6 +170,9 @@ function main() {
                 break;
             case 5:
                 depositAmount();
+                break;
+            case 6:
+                withdrawAmount();
                 break;
             case 8:
                 console.log("Exiting...Thank You!");
