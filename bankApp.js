@@ -76,6 +76,37 @@ function deleteAccount() {
     });
 }
 
+// 5.function deposit into an account
+function depositAmount() {
+    rl.question('Enter account number to deposit into: ', (number) => {
+        let account = accounts.find(acc => acc.number === number);
+        if (account) {
+            rl.question('Enter amount to deposit: ', (amount) => {
+                if (amount <= 0) {
+                    console.log("\nInvalid deposit amount!!");
+                }
+                else {
+                    amount = parseFloat(amount);
+                    account.balance = account.balance + amount;
+                    const filterPrev = accounts.filter(acc => acc.number !== number);
+                    if (filterPrev.length === 0) {
+                        accounts = account;
+                    }
+                    else {
+                        const newData = [filterPrev, account];
+                        accounts = newData;
+                    }
+                    console.log(`\nAmount ${amount}, successfully deposits into account ${number}`);
+                }
+                main();
+            });
+        } else {
+            console.log("\nAccount not found!!");
+            main();
+        }
+    });
+}
+
 
 // main function
 function main() {
@@ -95,8 +126,14 @@ function main() {
             case 1:
                 createAccount();
                 break;
-            case 1:
+            case 2:
                 displayAllAccounts();
+                break;
+            case 4:
+                deleteAccount();
+                break;
+            case 5:
+                depositAmount();
                 break;
             case 8:
                 console.log("Exiting...Thank You!");
