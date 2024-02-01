@@ -44,7 +44,12 @@ function createAccount() {
                             creationDate: new Date(),
                             type: type.toLowerCase(),
                         };
-                        accounts.push(account);
+                        if (accounts.length > 0) {
+                            accounts = [...accounts, account];
+                        }
+                        else {
+                            accounts = [account];
+                        }
                         console.log(`\nCongrats!!Account ${number} created successfully`);
                         main();
                     }
@@ -68,9 +73,11 @@ function updateAccount() {
         // find account to update
         let account = accounts.find(acc => acc.number === number);
         if (account) {
-            console.log("\n1. To update name");
+            console.log("\n----------Enter your choice----------");
+            console.log("1. To update name");
             console.log("2. To update account type");
             console.log("3. To update account number");
+            console.log("\n----------*****************----------");
 
             //Remove matched account from accounts
             const existsAccount = accounts.filter(each => each.number !== number);
@@ -82,16 +89,18 @@ function updateAccount() {
                             rl.question(`\nCurrent name is ${account.name}.Enter new name to update: `, (newName) => {
                                 //update with the new value
                                 account.name = newName;
-                                if (accounts.length === 0) {
-                                    accounts = account;
+                                if (existsAccount.length === 0) {
+                                    accounts = [account];
                                     console.log(`\nAccount updated Successfully with data ${newName}`)
                                 }
                                 else {
-                                    const newData = [existsAccount, account];
+                                    const newData = [...existsAccount, account];
                                     // sets main accounts with updated data
                                     accounts = newData;
                                     console.log(`\nAccount updated Successfully with data ${newName}`)
                                 }
+                                // to continue app
+                                main();
                             })
                         }
                         updateName();
@@ -108,15 +117,15 @@ function updateAccount() {
                                 const matchedType = filterRestType.find(each => each.toLowerCase() === newType.toLowerCase());
                                 if (matchedType) {
                                     // update with new value
-                                    account.type = newType;
+                                    account.type = newType.toLowerCase();
 
-                                    if (accounts.length === 0) {
-                                        accounts = account;
+                                    if (existsAccount.length === 0) {
+                                        accounts = [account];
 
                                         console.log(`\nAccount updated Successfully with data ${newType}`)
                                     }
                                     else {
-                                        const newData = [existsAccount, account];
+                                        const newData = [...existsAccount, account];
                                         // sets main accounts with updated data
                                         accounts = newData;
 
@@ -126,6 +135,8 @@ function updateAccount() {
                                 else {
                                     console.log("\nInvalid account type")
                                 }
+                                // to continue app
+                                main();
                             })
                         }
                         updateAccType();
@@ -139,13 +150,13 @@ function updateAccount() {
                                 if (findAcNo.length === 0) {
                                     // update with new value
                                     account.number = newNumber;
-                                    if (accounts.length === 0) {
-                                        accounts = account;
+                                    if (existsAccount.length === 0) {
+                                        accounts = [account];
 
                                         console.log(`\nAccount updated Successfully with new data ${newNumber}`)
                                     }
                                     else {
-                                        const newData = [existsAccount, account];
+                                        const newData = [...existsAccount, account];
                                         // sets main accounts with updated data
                                         accounts = newData;
 
@@ -155,18 +166,23 @@ function updateAccount() {
                                 else {
                                     console.log(`\n Account with this ${newNumber} number has already exists`)
                                 }
+                                // to continue app
+                                main();
                             })
                         }
                         updateAccNumber();
                         break;
                     default:
                         console.log("Invalid choice");
+                        // to continue app
+                        main();
                 }
             });
         } else {
             console.log("\nAccount not found");
+            // to continue app
+            main();
         }
-        main();
     });
 }
 
@@ -187,22 +203,22 @@ function deleteAccount() {
 // 5.function deposit into an account
 function depositAmount() {
     rl.question('Enter account number to deposit into: ', (number) => {
-        let account = accounts.find(acc => acc.number === number);
-        if (account) {
+        let findAccount = accounts.find(acc => acc.number === number);
+        if (findAccount.length !== 0) {
             rl.question('Enter amount to deposit: ', (amount) => {
                 if (amount <= 0) {
                     console.log("\nInvalid deposit amount!!");
                 }
                 else {
                     amount = parseFloat(amount);
-                    account.balance = account.balance + amount;
+                    findAccount.balance = findAccount.balance + amount;
                     const filterPrev = accounts.filter(acc => acc.number !== number);
-                    if (filterPrev.length === 0) {
-                        accounts = account;
+                    if (filterPrev.length !== 0) {
+                        const newData = [...filterPrev, findAccount];
+                        accounts = newData;
                     }
                     else {
-                        const newData = [filterPrev, account];
-                        accounts = newData;
+                        accounts = [findAccount];
                     }
                     console.log(`\nAmount ${amount}, successfully deposits into account ${number}`);
                 }
@@ -233,10 +249,10 @@ function withdrawAmount() {
                         account.balance = account.balance - amount;
                         const filterPrev = accounts.filter(acc => acc.number !== number);
                         if (filterPrev.length === 0) {
-                            accounts = account;
+                            accounts = [account];
                         }
                         else {
-                            const newData = [filterPrev, account];
+                            const newData = [...filterPrev, account];
                             accounts = newData;
                         }
                         console.log(`\nAmount ${amount}, successfully withDraw from account ${number}`);
@@ -266,7 +282,7 @@ function searchAccount() {
 
 // main function
 function main() {
-    console.log("\n------------------*****-----------------");
+    console.log("\n---------------Enter your choice--------------");
     console.log("1. Create a new account");
     console.log("2. Display all accounts");
     console.log("3. Update an account");
@@ -275,7 +291,7 @@ function main() {
     console.log("6. Withdraw an amount from your account");
     console.log("7. Search for account");
     console.log("8. Exit");
-    console.log("-----------------*****-----------------\n");
+    console.log("--------------*******************--------------\n");
 
     rl.question('Enter your choice: ', (choice) => {
         switch (parseInt(choice)) {
@@ -301,11 +317,11 @@ function main() {
                 searchAccount();
                 break;
             case 8:
-                console.log("Exiting...Thank You!");
+                console.log("\nExiting...Thank You!");
                 rl.close();
                 break;
             default:
-                console.log("Invalid choice");
+                console.log("\nInvalid choice");
                 rl.close();
         }
     });
